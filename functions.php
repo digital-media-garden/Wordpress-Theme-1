@@ -20,6 +20,8 @@
  }
  add_action('wp_enqueue_scripts', 'geniuscourses_enqueue_scripts');
 
+
+
 /* How HOOKS work: 
 function geniuscourses_show_meta(){
 	echo "<meta name='author' content='CRIC0VA' >";
@@ -59,14 +61,14 @@ function geniuscourses_theme_init(){
 			'quote',
 			'image',
 			'gallery'
-
 		));
-	add_post_type_support('car','post-formats');
+	
+		add_post_type_support('car','post-formats');
 
-} // end function geniuscourses_theme_init
+} // END INIT FUNCTION -  function geniuscourses_theme_init
 
+add_action('after_setup_theme','geniuscourses_theme_init', 0);
 
-add_action('after_setup_theme','geniuscourses_theme_init',0);
 
 
 function geniuscourses_register_post_type(){
@@ -89,13 +91,16 @@ function geniuscourses_register_post_type(){
 		'show_ui' => true,
 		'rewrite' => array('slug' => 'brands'),
 		'query_var' => true,
-		'show_in_rest' => true,
+		'show_admin_column' => true, //show under taxonomy in admin
+		'show_in_rest' => true, //show this taxonomy when editing post 
 
 	);
 
 	register_taxonomy('brand', array('car'), $args);
 
 	unset($args);
+
+
 
 
 
@@ -117,10 +122,8 @@ function geniuscourses_register_post_type(){
 		'show_ui' => true,
 		'rewrite' => array('slug' => 'manufactures'),
 		'query_var' => true,
-		'show_admin_column' => true,
+		'show_admin_column' => true, //show under taxonomy in admin
 		'show_in_rest' => true,
-
-
 	);
 
 	register_taxonomy('manufacture', array('car'), $args);
@@ -130,8 +133,9 @@ function geniuscourses_register_post_type(){
 
 
 
+	//old code TO REGISTER POST TYPE - CARS
 	$args = array(
-		'label' =>  esc_html__('Cars', 'geniuscourses'),
+		'label' => esc_html__('Cars', 'geniuscourses'),
 		'labels' => array(
 			'name'                  => esc_html_x( 'Cars', 'Post type general name', 'geniuscourses' ),
 			'singular_name'         => esc_html_x( 'Car', 'Post type singular name', 'geniuscourses' ),
@@ -166,6 +170,8 @@ function geniuscourses_register_post_type(){
 		'show_ui' => true,
 		'show_in_menu' => true,
 		'has_archive' => true,
+		'show_in_nav_menus' => false,
+		'show_in_admin_bar' => false,
 		'menu_position' => 100,
 		'menu_icon' => 'dashicons-welcome-write-blog',
 		'rewrite' => array('slug' => 'cars'),
@@ -174,8 +180,13 @@ function geniuscourses_register_post_type(){
 	);
 	register_post_type('car', $args);
 
-}
+} // END FUNCTION  geniuscourses_register_post_type // 
 add_action('init', 'geniuscourses_register_post_type');
+
+
+
+
+
 
 function geniuscourses_rewrite_rules(){
 	geniuscourses_register_post_type();
