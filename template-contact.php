@@ -6,6 +6,6 @@
 
  get_header();
 
- echo "Contact page template";
+ echo "<br>Contact page template - template-contact.php";
 
  get_footer();

@@ -1,12 +1,15 @@
+<p>TAXONOMY MANUFACTURE - test 2 page</p>
+
+
 <?php
 
 get_header();
 	
 
 
-// test code	
+// // test code	
 // $paged = get_query_var( 'paged', 1 );
-// echo 'Currently Browsing Page ', $paged;
+// echo '<br> Currently Browsing Page ', $paged;
 
 
 
@@ -18,10 +21,6 @@ get_header();
 ?> 
 
 
-    <p>TAXONOMY BRAND ARCHIVE PAGE TAXONOMY-BRAND.PHP - test</p>
-
-
-
     <div>
 
         <?php if(have_posts()) : while(have_posts()) : the_post();  ?>
@@ -30,13 +29,12 @@ get_header();
 
         <?php  endwhile; else : ?>
 
-        <?php fet_template_part('partials/content', 'none') ?>
+        <?php fet_template_part('partials/content', 'none'); ?>
 
         <?php endif; ?>	
 
     </div>
 
 <?php 
-get_sidebar('cars');
-get_footer();
 
+get_footer();

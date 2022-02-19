@@ -12,7 +12,7 @@ get_header();
 
 	<div>
     
-    Template for Custom Post Type Car
+    Template for TAXONOMY ARCHIVE
 		<header class="page-header">
 			<?php
 			the_archive_title( '<h1 class="page-title">', '</h1>' );
@@ -21,23 +21,11 @@ get_header();
 		</header><!-- .page-header -->
 
 
-		<?php 
-
-		$paged = (get_query_var('paged')) ? get_guery_var('paged') : 1;
-
-		$cars = new WP_Query(array('post_type'=>'car','posts_per_page'=>2, 'paged' => $paged));
-		
-		if($cars->have_posts()) : while($cars->have_posts()) : $cars->the_post();  ?>
+		<?php if(have_posts()) : while(have_posts()) : the_post();  ?>
 
 			<?php get_template_part('partials/content'); ?>
 
-		<?php  endwhile; ?>
-		
-			<div class="pagination">
-				<?php echo paginate_links(); ?>
-			</div>
-		
-		<?php else : ?>
+		<?php  endwhile; else : ?>
 
 			<?php fet_template_part('partials/content', 'none') ?>
 
@@ -45,5 +33,5 @@ get_header();
 	</div>
 
 <?php
-get_sidebar('cars');
+//get_sidebar();
 get_footer();

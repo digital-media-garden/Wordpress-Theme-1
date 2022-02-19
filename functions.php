@@ -8,6 +8,39 @@
  */
 
 
+require get_template_directory() . '/inc/widget-about.php';
+
+
+function geniuscourses_widgets_init() {
+	register_sidebar(
+		array(
+			'name'          => esc_html__( 'Sidebar', 'geniuscourses' ),
+			'id'            => 'sidebar-1',
+			'description'   => esc_html__( 'Add widgets here.', 'geniuscourses' ),
+			'before_widget' => '<section id="%1$s" class="widget %2$s">',
+			'after_widget'  => '</section>',
+			'before_title'  => '<h2 class="widget-title">',
+			'after_title'   => '</h2>',
+		)
+	);
+	register_sidebar(
+		array(
+			'name'          => esc_html__( 'Car Pages Sidebar', 'geniuscourses' ),
+			'id'            => 'carsidebar',
+			'description'   => esc_html__( 'Appear as a sidebar on Car pages.', 'geniuscourses' ),
+			'before_widget' => '<section id="%1$s" class="widget %2$s">',
+			'after_widget'  => '</section>',
+			'before_title'  => '<h2 class="widget-title">',
+			'after_title'   => '</h2>',
+		)
+	);
+	
+	register_widget('geniuscourses_about_widget');
+}
+add_action( 'widgets_init', 'geniuscourses_widgets_init' );
+
+
+
 
  function geniuscourses_enqueue_scripts(){
 	wp_enqueue_style('geniuscourses-general', get_template_directory_uri().'/assets/css/general.css', array(), '1.0', 'all');
@@ -96,7 +129,13 @@ function geniuscourses_register_post_type(){
 
 	);
 
-	register_taxonomy('brand', array('car'), $args);
+	if(!taxonomy_exists('brand')) {
+		
+		register_taxonomy('brand', array('car'), $args);
+
+	}
+
+	//register_taxonomy('brand', array('car'), $args);
 
 	unset($args);
 
@@ -295,20 +334,6 @@ add_action( 'after_setup_theme', 'geniuscourses_content_width', 0 );
  *
  * @link https://developer.wordpress.org/themes/functionality/sidebars/#registering-a-sidebar
  */
-function geniuscourses_widgets_init() {
-	register_sidebar(
-		array(
-			'name'          => esc_html__( 'Sidebar', 'geniuscourses' ),
-			'id'            => 'sidebar-1',
-			'description'   => esc_html__( 'Add widgets here.', 'geniuscourses' ),
-			'before_widget' => '<section id="%1$s" class="widget %2$s">',
-			'after_widget'  => '</section>',
-			'before_title'  => '<h2 class="widget-title">',
-			'after_title'   => '</h2>',
-		)
-	);
-}
-add_action( 'widgets_init', 'geniuscourses_widgets_init' );
 
 
 /**

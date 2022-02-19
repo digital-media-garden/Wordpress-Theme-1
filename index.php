@@ -6,12 +6,17 @@
 
 			<?php get_template_part('partials/content'); ?>
 
-		<?php  endwhile; else : ?>
+		<?php  endwhile; ?>
+		
+			<div class="pagination">
+				<?php echo paginate_links(); ?>
+			</div>
+		
+		<?php else : ?>
 
 			<?php fet_template_part('partials/content', 'none') ?>
 
 		<?php endif; ?>	
-
 
 	</div>
 <?php

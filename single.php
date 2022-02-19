@@ -18,6 +18,9 @@ get_header();
 
 				get_template_part( 'partials/content', get_post_type() );
 
+				//previous_post_link();
+				//next_post_link();
+
 				the_post_navigation(
 					array(
 						'prev_text' => '<span class="nav-subtitle">' . esc_html__( 'Previous:', 'geniuscourses' ) . '</span> <span class="nav-title">%title</span>',
@@ -36,5 +39,13 @@ get_header();
 	</main><!-- #main -->
 
 <?php
-get_sidebar();
+	if(is_singular('car')){
+		
+		get_sidebar('cars');
+
+	} else {
+
+		get_sidebar();
+	}
+
 get_footer();
