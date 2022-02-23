@@ -20,7 +20,7 @@
 
     <?php if($cars->have_posts()) : while($cars->have_posts()) : $cars->the_post();  ?>
 
-        <?php get_template_part('partials/content'); ?>
+        <?php get_template_part('partials/content', 'car'); ?>
 
     <?php  endwhile; geniuscourses_paginate($cars); else : ?>
 

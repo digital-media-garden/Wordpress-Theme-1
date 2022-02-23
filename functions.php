@@ -14,7 +14,6 @@ require_once get_template_directory() . '/inc/class-tgm-plugin-activation.php';
 
 add_action( 'tgmpa_register', 'geniuscourses_register_required_plugins' );
 
-
 function geniuscourses_register_required_plugins() {
 	/*
 	 * Array of plugin arrays. Required keys are name and slug.
@@ -66,83 +65,6 @@ function geniuscourses_register_required_plugins() {
 		'dismiss_msg'  => '',                      // If 'dismissable' is false, this message will be output at top of nag.
 		'is_automatic' => false,                   // Automatically activate plugins after installation or not.
 		'message'      => '',                      // Message to output right before the plugins table.
-
-		/*
-		'strings'      => array(
-			'page_title'                      => __( 'Install Required Plugins', 'geniuscourses' ),
-			'menu_title'                      => __( 'Install Plugins', 'geniuscourses' ),
-			/* translators: %s: plugin name. * /
-			'installing'                      => __( 'Installing Plugin: %s', 'geniuscourses' ),
-			/* translators: %s: plugin name. * /
-			'updating'                        => __( 'Updating Plugin: %s', 'geniuscourses' ),
-			'oops'                            => __( 'Something went wrong with the plugin API.', 'geniuscourses' ),
-			'notice_can_install_required'     => _n_noop(
-				/* translators: 1: plugin name(s). * /
-				'This theme requires the following plugin: %1$s.',
-				'This theme requires the following plugins: %1$s.',
-				'geniuscourses'
-			),
-			'notice_can_install_recommended'  => _n_noop(
-				/* translators: 1: plugin name(s). * /
-				'This theme recommends the following plugin: %1$s.',
-				'This theme recommends the following plugins: %1$s.',
-				'geniuscourses'
-			),
-			'notice_ask_to_update'            => _n_noop(
-				/* translators: 1: plugin name(s). * /
-				'The following plugin needs to be updated to its latest version to ensure maximum compatibility with this theme: %1$s.',
-				'The following plugins need to be updated to their latest version to ensure maximum compatibility with this theme: %1$s.',
-				'geniuscourses'
-			),
-			'notice_ask_to_update_maybe'      => _n_noop(
-				/* translators: 1: plugin name(s). * /
-				'There is an update available for: %1$s.',
-				'There are updates available for the following plugins: %1$s.',
-				'geniuscourses'
-			),
-			'notice_can_activate_required'    => _n_noop(
-				/* translators: 1: plugin name(s). * /
-				'The following required plugin is currently inactive: %1$s.',
-				'The following required plugins are currently inactive: %1$s.',
-				'geniuscourses'
-			),
-			'notice_can_activate_recommended' => _n_noop(
-				/* translators: 1: plugin name(s). * /
-				'The following recommended plugin is currently inactive: %1$s.',
-				'The following recommended plugins are currently inactive: %1$s.',
-				'geniuscourses'
-			),
-			'install_link'                    => _n_noop(
-				'Begin installing plugin',
-				'Begin installing plugins',
-				'geniuscourses'
-			),
-			'update_link' 					  => _n_noop(
-				'Begin updating plugin',
-				'Begin updating plugins',
-				'geniuscourses'
-			),
-			'activate_link'                   => _n_noop(
-				'Begin activating plugin',
-				'Begin activating plugins',
-				'geniuscourses'
-			),
-			'return'                          => __( 'Return to Required Plugins Installer', 'geniuscourses' ),
-			'plugin_activated'                => __( 'Plugin activated successfully.', 'geniuscourses' ),
-			'activated_successfully'          => __( 'The following plugin was activated successfully:', 'geniuscourses' ),
-			/* translators: 1: plugin name. * /
-			'plugin_already_active'           => __( 'No action taken. Plugin %1$s was already active.', 'geniuscourses' ),
-			/* translators: 1: plugin name. * /
-			'plugin_needs_higher_version'     => __( 'Plugin not activated. A higher version of %s is needed for this theme. Please update the plugin.', 'geniuscourses' ),
-			/* translators: 1: dashboard link. * /
-			'complete'                        => __( 'All plugins installed and activated successfully. %1$s', 'geniuscourses' ),
-			'dismiss'                         => __( 'Dismiss this notice', 'geniuscourses' ),
-			'notice_cannot_install_activate'  => __( 'There are one or more required or recommended plugins to install, update or activate.', 'geniuscourses' ),
-			'contact_admin'                   => __( 'Please contact the administrator of this site for help.', 'geniuscourses' ),
-
-			'nag_type'                        => '', // Determines admin notice type - can only be one of the typical WP notice classes, such as 'updated', 'update-nag', 'notice-warning', 'notice-info' or 'error'. Some of which may not work as expected in older WP versions.
-		),
-		*/
 	);
 
 	tgmpa( $plugins, $config );
@@ -173,6 +95,8 @@ function geniuscourses_paginate($query){
 		'prev_next' => false,
 	) );
 }
+
+
 
 
 function geniuscourses_widgets_init() {
@@ -250,10 +174,18 @@ function geniuscourses_theme_init(){
 	* Enable support for Post Thumbnails on posts and pages.
 	* @link https://developer.wordpress.org/themes/functionality/featured-images-post-thumbnails/
 	*/
+		
 	add_theme_support( 'post-thumbnails' );
-	add_image_size( 'car-cover',  );
-
+	add_image_size( 'car-cover', 240, 188, true );
 	//WP reserved: thumb, thumbnail, medium, large, post-thumbnail
+
+	update_option('thumbnail_size_w', 170);
+	update_option('thumbnail_size_h', 170);
+	update_option('thumbnail_crop', 1);
+
+	set_post_thumbnail_size(170,170);
+
+
 
 	add_theme_support('post-formats',
 		array(
@@ -339,7 +271,7 @@ function geniuscourses_register_post_type(){
 
 
 
-	//old code TO REGISTER POST TYPE - CARS
+	//code TO REGISTER POST TYPE - CARS
 	$args = array(
 		'label' => esc_html__('Cars', 'geniuscourses'),
 		'labels' => array(
@@ -370,7 +302,7 @@ function geniuscourses_register_post_type(){
 
 
 		),
-		'supports' => array('title', 'editor', 'author', 'exerpt', 'comments', 'revisions', 'page-attributes', 'post-formats'),
+		'supports' => array('title', 'editor', 'author', 'exerpt', 'comments', 'revisions', 'page-attributes', 'post-formats', 'thumbnail'),
 		'public' => true,
 		'publicly_queryable' => true,
 		'show_ui' => true,
