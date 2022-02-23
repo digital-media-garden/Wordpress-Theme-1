@@ -10,9 +10,12 @@
 
 require get_template_directory() . '/inc/widget-about.php';
 //require get_template_directory() . '/inc/metaboxes.php';
+require get_template_directory() . '/inc/metaboxes.php';
 require_once get_template_directory() . '/inc/class-tgm-plugin-activation.php';
 
 add_action( 'tgmpa_register', 'geniuscourses_register_required_plugins' );
+
+
 
 function geniuscourses_register_required_plugins() {
 	/*
