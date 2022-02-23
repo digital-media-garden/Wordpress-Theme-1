@@ -7,12 +7,14 @@
  ?>
 
 <br><p>template-homepage.php<br></p>
-<div>
+<div class="cars">
 
     <?php
+    $paged = (get_query_var('page')) ? get_query_var('page') : 1;
     $args = array(
         'post-type' => 'car',
-        'posts_per_page' => -1,
+        'paged' => $paged,
+        'posts_per_page' => 2,
     );
     $cars = new WP_Query($args); ?>
 
@@ -20,7 +22,7 @@
 
         <?php get_template_part('partials/content'); ?>
 
-    <?php  endwhile; else : ?>
+    <?php  endwhile; geniuscourses_paginate($cars); else : ?>
 
         <?php fet_template_part('partials/content', 'none'); ?>
 
