@@ -24,10 +24,18 @@
 
 <?php
 
-	if(is_tax('brand', array('mercedes', 'volvo'))) {
-		echo "Header for Brand pages";
-	} else {
-		echo "Simple Header";
-	}
+
+
+
+
+
+
+// Hook Example: do_action('geniuscourses_our_hook', $var, $var2);
+
+	// if(is_tax('brand', array('mercedes', 'volvo'))) {
+	// 	echo "Header for Brand pages";
+	// } else {
+	// 	echo "Simple Header";
+	// }
 
 

@@ -324,7 +324,7 @@ add_action('init', 'geniuscourses_register_post_type');
 
 
 
-
+// this will be moved to a different file in Список хуков WordPress
 
 function geniuscourses_rewrite_rules(){
 	geniuscourses_register_post_type();
@@ -462,3 +462,19 @@ if ( defined( 'JETPACK__VERSION' ) ) {
 	require get_template_directory() . '/inc/jetpack.php';
 }
 
+
+// Explaining WP Actions/Hooks - see header.php
+// function gc_first_function(){
+// 	echo 'Hello World<br>';
+// }
+// add_action('geniuscourses_our_hook', 'gc_first_function',2);
+
+
+// function gc_second_function(){
+// 	echo 'test<br>';
+// }
+// add_action('geniuscourses_our_hook', 'gc_second_function',1);
+
+// How to remove filters and actions:
+// remove_filter('geniuscourses_first_filter', 'gc_first_filter');
+// remove_action('hook', 'action');
