@@ -24,6 +24,9 @@
 
 <?php
 
+global $geniuscourses_options;
+
+echo $geniuscourses_options['logo']['url'];
 
 
 

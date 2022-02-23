@@ -12,6 +12,7 @@ require get_template_directory() . '/inc/widget-about.php';
 //require get_template_directory() . '/inc/metaboxes.php';
 require get_template_directory() . '/inc/metaboxes.php';
 require_once get_template_directory() . '/inc/class-tgm-plugin-activation.php';
+require get_template_directory() . '/inc/redux-options.php';
 
 add_action( 'tgmpa_register', 'geniuscourses_register_required_plugins' );
 
