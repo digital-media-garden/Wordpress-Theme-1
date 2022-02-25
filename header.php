@@ -22,11 +22,11 @@
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
 
+<button id="button_car">Show All Cars</button>
+<div id="car_content" style="background:#f5f5f5; border: 1px solid #000;"></div>
 <?php
 
-global $geniuscourses_options;
 
-echo $geniuscourses_options['logo']['url'];
 
 
 

@@ -134,12 +134,58 @@ add_action( 'widgets_init', 'geniuscourses_widgets_init' );
 	wp_enqueue_style('geniuscourses-general', get_template_directory_uri().'/assets/css/general.css', array(), '1.0', 'all');
 
 	wp_enqueue_script('geniuscourses-script', get_template_directory_uri().'/assets/js/script.js', array('jquery'), '1.0', true);
+	wp_enqueue_script('geniuscourses-ajax', get_template_directory_uri().'/assets/js/ajax.js', array('jquery'), '1.0', true);
+	wp_localize_script(
+		'geniuscourses-ajax', 
+		'geniuscourses_ajax_script',
+		array(
+			'ajaxurl' => admin_url('admin-ajax.php'),
+			'nonce' => wp_create_nonce('ajax-nonce'),
+			'string_box' => esc_html__('Hello', 'geniuscourses'),
+			'string_new' => esc_html__('Hello World', 'geniuscourses'),
+		)
+		
+	);
+
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
 	}
  }
  add_action('wp_enqueue_scripts', 'geniuscourses_enqueue_scripts');
+
+
+function geniuscourses_ajax_example(){
+	if(!wp_verify_nonce($_REQUEST['nonce'], 'ajax-nonce')){
+		die;
+	}
+
+	if(isset($_REQUEST['string_one'])){
+		echo $_REQUEST['string_one'];
+	}
+
+	echo "<br>";
+
+	if(isset($_REQUEST['string_two'])){
+		echo $_REQUEST['string_two'];
+	}
+
+	$cars = new WP_Query(array('post-type'=>'car','posts_per_page'=>-1));
+	
+	if($cars->have_posts()) : while($cars->have_posts()) : $cars->the_post();  
+    
+	get_template_part('partials/content', 'car');
+
+    endwhile;  endif; 
+
+	wp_reset_postdata(); 
+
+	die;
+
+}
+add_action('wp_ajax_geniuscourses_ajax_example', 'geniuscourses_ajax_example');
+add_action('wp_ajax_nopriv_geniuscourses_ajax_example', 'geniuscourses_ajax_example');
+
 
 
 
@@ -205,159 +251,6 @@ function geniuscourses_theme_init(){
 } // END INIT FUNCTION -  function geniuscourses_theme_init
 
 add_action('after_setup_theme','geniuscourses_theme_init', 0);
-
-
-
-
-
-
-
-
-
-
-
-
-//function geniuscourses_register_post_type(){
-
-	// $args = array(
-	// 	'hierarchical' => false,
-	// 	'labels' => array(
-	// 		'name'              => esc_html_x( 'Brands', 'taxonomy general name', 'geniuscourses' ),
-	// 		'singular_name'     => esc_html_x( 'Brand', 'taxonomy singular name', 'geniuscourses' ),
-	// 		'search_items'      => esc_html__( 'Search Brands', 'geniuscourses' ),
-	// 		'all_items'         => esc_html__( 'All Brands', 'geniuscourses' ),
-	// 		'parent_item'       => esc_html__( 'Parent Brand', 'geniuscourses' ),
-	// 		'parent_item_colon' => esc_html__( 'Parent Brand:', 'geniuscourses' ),
-	// 		'edit_item'         => esc_html__( 'Edit Brand', 'geniuscourses' ),
-	// 		'update_item'       => esc_html__( 'Update Brand', 'geniuscourses' ),
-	// 		'add_new_item'      => esc_html__( 'Add New Brand', 'geniuscourses' ),
-	// 		'new_item_name'     => esc_html__( 'New Brand Name', 'geniuscourses' ),
-	// 		'menu_name'         => esc_html__( 'Brand', 'geniuscourses' ),
-		//),
-		// 'show_ui' => true,
-		// 'rewrite' => array('slug' => 'brands'),
-		// 'query_var' => true,
-		//'show_admin_column' => true, //show under taxonomy in admin
-		//'show_in_rest' => true, //show this taxonomy when editing post 
-
-	//);
-
-	// if(!taxonomy_exists('brand')) {
-		
-	// 	register_taxonomy('brand', array('car'), $args);
-
-	// }
-
-	//register_taxonomy('brand', array('car'), $args);
-
-	//unset($args);
-
-
-
-
-
-	// $args = array(
-	// 	'hierarchical' => true,
-	// 	'labels' => array(
-	// 		'name'              => esc_html_x( 'Manufactures', 'taxonomy general name', 'geniuscourses' ),
-	// 		'singular_name'     => esc_html_x( 'Manufacture', 'taxonomy singular name', 'geniuscourses' ),
-	// 		'search_items'      => esc_html__( 'Search Manufactures', 'geniuscourses' ),
-	// 		'all_items'         => esc_html__( 'All Manufactures', 'geniuscourses' ),
-	// 		'parent_item'       => esc_html__( 'Parent Manufacture', 'geniuscourses' ),
-	// 		'parent_item_colon' => esc_html__( 'Parent Manufacture:', 'geniuscourses' ),
-	// 		'edit_item'         => esc_html__( 'Edit Manufacture', 'geniuscourses' ),
-	// 		'update_item'       => esc_html__( 'Update Manufacture', 'geniuscourses' ),
-	// 		'add_new_item'      => esc_html__( 'Add New Manufacture', 'geniuscourses' ),
-	// 		'new_item_name'     => esc_html__( 'New Manufacture Name', 'geniuscourses' ),
-	// 		'menu_name'         => esc_html__( 'Manufacture', 'geniuscourses' ),
-	// 	),
-	// 	'show_ui' => true,
-	// 	'rewrite' => array('slug' => 'manufactures'),
-	// 	'query_var' => true,
-		// 'show_admin_column' => true, //show under taxonomy in admin
-	// 	'show_in_rest' => true,
-	// );
-
-	// register_taxonomy('manufacture', array('car'), $args);
-
-	// unset($args);
-
-
-
-
-	//code TO REGISTER POST TYPE - CARS
-	// $args = array(
-	// 	'label' => esc_html__('Cars', 'geniuscourses'),
-	// 	'labels' => array(
-	// 		'name'                  => esc_html_x( 'Cars', 'Post type general name', 'geniuscourses' ),
-	// 		'singular_name'         => esc_html_x( 'Car', 'Post type singular name', 'geniuscourses' ),
-	// 		'menu_name'             => esc_html_x( 'Cars', 'Admin Menu text', 'geniuscourses' ),
-	// 		'name_admin_bar'        => esc_html_x( 'Car', 'Add New on Toolbar', 'geniuscourses' ),
-	// 		'add_new'               => esc_html__( 'Add New', 'geniuscourses' ),
-	// 		'add_new_item'          => esc_html__( 'Add New Car', 'geniuscourses' ),
-	// 		'new_item'              => esc_html__( 'New Car', 'geniuscourses' ),
-	// 		'edit_item'             => esc_html__( 'Edit Car', 'geniuscourses' ),
-	// 		'view_item'             => esc_html__( 'View Car', 'geniuscourses' ),
-	// 		'all_items'             => esc_html__( 'All Cars', 'geniuscourses' ),
-	// 		'search_items'          => esc_html__( 'Search Cars', 'geniuscourses' ),
-	// 		'parent_item_colon'     => esc_html__( 'Parent Cars:', 'geniuscourses' ),
-	// 		'not_found'             => esc_html__( 'No Cars found.', 'geniuscourses' ),
-	// 		'not_found_in_trash'    => esc_html__( 'No Cars found in Trash.', 'geniuscourses' ),
-	// 		'featured_image'        => esc_html_x( 'Car Cover Image', 'Overrides the “Featured Image” phrase for this post type. Added in 4.3', 'geniuscourses' ),
-	// 		'set_featured_image'    => esc_html_x( 'Set cover image', 'Overrides the “Set featured image” phrase for this post type. Added in 4.3', 'geniuscourses' ),
-	// 		'remove_featured_image' => esc_html_x( 'Remove cover image', 'Overrides the “Remove featured image” phrase for this post type. Added in 4.3', 'geniuscourses' ),
-	// 		'use_featured_image'    => esc_html_x( 'Use as cover image', 'Overrides the “Use as featured image” phrase for this post type. Added in 4.3', 'geniuscourses' ),
-	// 		'archives'              => esc_html_x( 'Car archives', 'The post type archive label used in nav menus. Default “Post Archives”. Added in 4.4', 'geniuscourses' ),
-	// 		'insert_into_item'      => esc_html_x( 'Insert into Car', 'Overrides the “Insert into post”/”Insert into page” phrase (used when inserting media into a post). Added in 4.4', 'geniuscourses' ),
-	// 		'uploaded_to_this_item' => esc_html_x( 'Uploaded to this Car', 'Overrides the “Uploaded to this post”/”Uploaded to this page” phrase (used when viewing media attached to a post). Added in 4.4', 'geniuscourses' ),
-	// 		'filter_items_list'     => esc_html_x( 'Filter Cars list', 'Screen reader text for the filter links heading on the post type listing screen. Default “Filter posts list”/”Filter pages list”. Added in 4.4', 'geniuscourses' ),
-	// 		'items_list_navigation' => esc_html_x( 'Cars list navigation', 'Screen reader text for the pagination heading on the post type listing screen. Default “Posts list navigation”/”Pages list navigation”. Added in 4.4', 'geniuscourses' ),
-	// 		'items_list'            => esc_html_x( 'Cars list', 'Screen reader text for the items list heading on the post type listing screen. Default “Posts list”/”Pages list”. Added in 4.4', 'geniuscourses' ),			
-
-
-	// 	),
-	// 	'supports' => array('title', 'editor', 'author', 'exerpt', 'comments', 'revisions', 'page-attributes', 'post-formats', 'thumbnail'),
-	// 	'public' => true,
-	// 	'publicly_queryable' => true,
-	// 	'show_ui' => true,
-	// 	'show_in_menu' => true,
-	// 	'has_archive' => true,
-	// 	'show_in_nav_menus' => false,
-	// 	'show_in_admin_bar' => false,
-	// 	'menu_position' => 100,
-	// 	'menu_icon' => 'dashicons-welcome-write-blog',
-	// 	'rewrite' => array('slug' => 'cars'),
-	// 	'show_in_rest' => true
-
-	// );
-	// register_post_type('car', $args);
-
-//} // END FUNCTION  geniuscourses_register_post_type // 
-//add_action('init', 'geniuscourses_register_post_type');
-
-
-
-
-// this will be moved to a different file in Список хуков WordPress
-
-// function geniuscourses_rewrite_rules(){
-// 	geniuscourses_register_post_type();
-// 	flush_rewrite_rules();
-// }
-// add_action('after_switch_theme', 'geniuscourses_rewrite_rules');
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
