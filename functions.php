@@ -131,22 +131,24 @@ add_action( 'widgets_init', 'geniuscourses_widgets_init' );
 
 
  function geniuscourses_enqueue_scripts(){
-	wp_enqueue_style('geniuscourses-general', get_template_directory_uri().'/assets/css/general.css', array(), '1.0', 'all');
+	wp_enqueue_style('geniuscourses-font-awesome','https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css', array(), '1.0', 'all');
+	wp_enqueue_style('owl.carousel', get_template_directory_uri().'/assets/js/lib/owlcarousel/assets/owl.carousel.min.css', array(), '1.0', 'all');
+	wp_enqueue_style('tempusdominus-bootstrap-4', get_template_directory_uri().'/assets/js/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css', array(), '1.0', 'all');
+	wp_enqueue_style('geniuscourses-bootstrap', get_template_directory_uri().'/assets/css/bootstrap.min.css', array(), '1.0', 'all');
+	wp_enqueue_style('geniuscourses-style', get_template_directory_uri().'/assets/css/style.css', array(), '1.0', 'all');
+
 
 	wp_enqueue_script('geniuscourses-script', get_template_directory_uri().'/assets/js/script.js', array('jquery'), '1.0', true);
-	wp_enqueue_script('geniuscourses-ajax', get_template_directory_uri().'/assets/js/ajax.js', array('jquery'), '1.0', true);
-	wp_localize_script(
-		'geniuscourses-ajax', 
-		'geniuscourses_ajax_script',
-		array(
-			'ajaxurl' => admin_url('admin-ajax.php'),
-			'nonce' => wp_create_nonce('ajax-nonce'),
-			'string_box' => esc_html__('Hello', 'geniuscourses'),
-			'string_new' => esc_html__('Hello World', 'geniuscourses'),
-		)
-		
-	);
+	wp_enqueue_script('bootstrap.bundle', 'https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js', array('jquery'), '1.0', true);
+	wp_enqueue_script('easing', get_template_directory_uri().'/assets/js/lib/easing/easing.min.js', array('jquery'), '1.0', true);
+	wp_enqueue_script('waypoints', get_template_directory_uri().'/assets/js/lib/waypoints/waypoints.min.js', array('jquery'), '1.0', true);
+	wp_enqueue_script('owl.carousel', get_template_directory_uri().'/assets/js/lib/owlcarousel/owl.carousel.min.js', array('jquery'), '1.0', true);
+	wp_enqueue_script('moment', get_template_directory_uri().'/assets/js/lib/tempusdominus/js/moment.min.js', array('jquery'), '1.0', true);
+	wp_enqueue_script('moment-timezone', get_template_directory_uri().'/assets/js/lib/tempusdominus/js/moment-timezone.min.js', array('jquery'), '1.0', true);
+	wp_enqueue_script('tempusdominus-bootstrap-4', get_template_directory_uri().'/assets/js/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js', array('jquery'), '1.0', true);
+	wp_enqueue_script('geniuscourses-main', get_template_directory_uri().'/assets/js/main.js', array('jquery'), '1.0', true);
 
+	
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
@@ -273,18 +275,12 @@ add_action( 'after_setup_theme', 'geniuscourses_content_width', 0 );
 
 
 
-// Explaining WP Actions/Hooks - see header.php
-// function gc_first_function(){
-// 	echo 'Hello World<br>';
-// }
-// add_action('geniuscourses_our_hook', 'gc_first_function',2);
 
 
-// function gc_second_function(){
-// 	echo 'test<br>';
-// }
-// add_action('geniuscourses_our_hook', 'gc_second_function',1);
-
-// How to remove filters and actions:
-// remove_filter('geniuscourses_first_filter', 'gc_first_filter');
-// remove_action('hook', 'action');
+function gc_add_class_on_li($classes,$item,$args){
+	if(isset($args->add_li_class)){
+		$classes[] = $args->add_li_class;
+	}
+	return $classes;
+}
+add_filter('nav_menu_css_class','gc_add_class_on_li',1,3);
