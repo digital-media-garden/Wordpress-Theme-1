@@ -1,4 +1,4 @@
-=== Geniuscourses ===
+=== digital-media-garden-blog ===
 
 Contributors: automattic
 Tags: custom-background, custom-logo, custom-menu, featured-images, threaded-comments, translation-ready
@@ -10,7 +10,7 @@ Stable tag: 1.0.0
 License: GNU General Public License v2 or later
 License URI: LICENSE
 
-A starter theme called Geniuscourses.
+A starter theme called digital-media-garden-blog.
 
 == Description ==
 
@@ -26,7 +26,7 @@ Description
 
 = Does this theme support any plugins? =
 
-Geniuscourses includes support for WooCommerce and for Infinite Scroll in Jetpack.
+digital-media-garden-blog includes support for WooCommerce and for Infinite Scroll in Jetpack.
 
 == Changelog ==
 

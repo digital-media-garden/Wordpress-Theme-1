@@ -1,210 +1,62 @@
 <?php
 /**
- * Geniuscourses functions and definitions
+ * digital-media-garden-blog functions and definitions
  *
  * @link https://developer.wordpress.org/themes/basics/theme-functions/
  *
- * @package Geniuscourses
+ * @package digital-media-garden-blog
  */
 
+if ( ! defined( '_S_VERSION' ) ) {
+	// Replace the version number of the theme on each release.
+	define( '_S_VERSION', '1.0.0' );
+}
 
-require_once get_template_directory() . '/inc/class-tgm-plugin-activation.php';
-require get_template_directory() . '/inc/redux-options.php';
-
-add_action( 'tgmpa_register', 'geniuscourses_register_required_plugins' );
-
-
-
-function geniuscourses_register_required_plugins() {
+/**
+ * Sets up theme defaults and registers support for various WordPress features.
+ *
+ * Note that this function is hooked into the after_setup_theme hook, which
+ * runs before the init hook. The init hook is too late for some features, such
+ * as indicating support for post thumbnails.
+ */
+function digital_media_garden_blog_setup() {
 	/*
-	 * Array of plugin arrays. Required keys are name and slug.
-	 * If the source is NOT from the .org repo, then source is also required.
-	 */
-	$plugins = array(
+		* Make theme available for translation.
+		* Translations can be filed in the /languages/ directory.
+		* If you're building a theme based on digital-media-garden-blog, use a find and replace
+		* to change 'digital-media-garden-blog' to the name of your theme in all the template files.
+		*/
+	load_theme_textdomain( 'digital-media-garden-blog', get_template_directory() . '/languages' );
 
-		// This is an example of how to include a plugin bundled with a theme.
-		array(
-			'name'               => 'Geniusourses Core', // The plugin name.
-			'slug'               => 'geniusourses-core', // The plugin slug (typically the folder name).
-			'source'             => get_template_directory() . '/plugins/geniuscourses-core.zip', // The plugin source.
-			'required'           => true, // If false, the plugin is only 'recommended' instead of required.
-			'version'            => '1.1', // E.g. 1.0.0. If set, the active plugin must be this version or higher. If the plugin version is higher than the plugin version installed, the user will be notified to update the plugin.
-			'force_activation'   => false, // If true, plugin is activated upon theme activation and cannot be deactivated until theme switch.
-			'force_deactivation' => false, // If true, plugin is deactivated upon theme switch, useful for theme-specific plugins.
-		),
-
-		// This is an example of how to include a plugin from the WordPress Plugin Repository.
-		array(
-			'name'      => 'Advanced Custom Fields',
-			'slug'      => 'advanced-custom-fields',
-			'required'  => true,
-		),
-
-		array(
-			'name'      => 'Gutenberg Template and Pattern Library & Redux Framework',
-			'slug'      => 'redux-framework',
-			'required'  => true,
-		),
-
-	);
+	// Add default posts and comments RSS feed links to head.
+	add_theme_support( 'automatic-feed-links' );
 
 	/*
-	 * Array of configuration settings. Amend each line as needed.
-	 *
-	 * TGMPA will start providing localized text strings soon. If you already have translations of our standard
-	 * strings available, please help us make TGMPA even better by giving us access to these translations or by
-	 * sending in a pull-request with .po file(s) with the translations.
-	 *
-	 * Only uncomment the strings in the config array if you want to customize the strings.
-	 */
-	$config = array(
-		'id'           => 'geniuscourses',                 // Unique ID for hashing notices for multiple instances of TGMPA.
-		'default_path' => '',                      // Default absolute path to bundled plugins.
-		'menu'         => 'tgmpa-install-plugins', // Menu slug.
-		'has_notices'  => true,                    // Show admin notices or not.
-		'dismissable'  => true,                    // If false, a user cannot dismiss the nag message.
-		'dismiss_msg'  => '',                      // If 'dismissable' is false, this message will be output at top of nag.
-		'is_automatic' => false,                   // Automatically activate plugins after installation or not.
-		'message'      => '',                      // Message to output right before the plugins table.
-	);
+		* Let WordPress manage the document title.
+		* By adding theme support, we declare that this theme does not use a
+		* hard-coded <title> tag in the document head, and expect WordPress to
+		* provide it for us.
+		*/
+	add_theme_support( 'title-tag' );
 
-	tgmpa( $plugins, $config );
-}
+	/*
+		* Enable support for Post Thumbnails on posts and pages.
+		*
+		* @link https://developer.wordpress.org/themes/functionality/featured-images-post-thumbnails/
+		*/
+	add_theme_support( 'post-thumbnails' );
 
-
-
-
-
-
-function geniuscourses_paginate($query){
-
-	$big = 999999999; // need an unlikely integer
-
-	$paged ='';
-	if(is_singular()) {
-		$paged = get_query_var('page');
-	} else {
-		$paged = get_query_var('paged');
-	}
-
-
-	echo paginate_links( array(
-		'base' => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
-		'format' => '?paged=%#%',
-		'current' => max( 1, $paged ),
-		'total' => $query->max_num_pages,
-		'prev_next' => false,
-	) );
-}
-
-
-
-
-function geniuscourses_widgets_init() {
-	register_sidebar(
+	// This theme uses wp_nav_menu() in one location.
+	register_nav_menus(
 		array(
-			'name'          => esc_html__( 'Sidebar', 'geniuscourses' ),
-			'id'            => 'sidebar-1',
-			'description'   => esc_html__( 'Add widgets here.', 'geniuscourses' ),
-			'before_widget' => '<section id="%1$s" class="widget %2$s">',
-			'after_widget'  => '</section>',
-			'before_title'  => '<h2 class="widget-title">',
-			'after_title'   => '</h2>',
+			'blog-nav' => esc_html__( 'Blog Navigation', 'digital-media-garden-blog' ),
 		)
 	);
-	register_sidebar(
-		array(
-			'name'          => esc_html__( 'Car Pages Sidebar', 'geniuscourses' ),
-			'id'            => 'carsidebar',
-			'description'   => esc_html__( 'Appear as a sidebar on Car pages.', 'geniuscourses' ),
-			'before_widget' => '<section id="%1$s" class="widget %2$s">',
-			'after_widget'  => '</section>',
-			'before_title'  => '<h2 class="widget-title">',
-			'after_title'   => '</h2>',
-		)
-	);
-	
-}
-add_action( 'widgets_init', 'geniuscourses_widgets_init' );
 
-
-
-
- function geniuscourses_enqueue_scripts(){
-	wp_enqueue_style('geniuscourses-font-awesome','https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css', array(), '1.0', 'all');
-	wp_enqueue_style('owl.carousel', get_template_directory_uri().'/assets/js/lib/owlcarousel/assets/owl.carousel.min.css', array(), '1.0', 'all');
-	wp_enqueue_style('tempusdominus-bootstrap-4', get_template_directory_uri().'/assets/js/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css', array(), '1.0', 'all');
-	wp_enqueue_style('geniuscourses-bootstrap', get_template_directory_uri().'/assets/css/bootstrap.min.css', array(), '1.0', 'all');
-	wp_enqueue_style('geniuscourses-style', get_template_directory_uri().'/assets/css/style.css', array(), '1.0', 'all');
-
-
-	wp_enqueue_script('geniuscourses-script', get_template_directory_uri().'/assets/js/script.js', array('jquery'), '1.0', true);
-	wp_enqueue_script('bootstrap.bundle', 'https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js', array('jquery'), '1.0', true);
-	wp_enqueue_script('easing', get_template_directory_uri().'/assets/js/lib/easing/easing.min.js', array('jquery'), '1.0', true);
-	wp_enqueue_script('waypoints', get_template_directory_uri().'/assets/js/lib/waypoints/waypoints.min.js', array('jquery'), '1.0', true);
-	wp_enqueue_script('owl.carousel', get_template_directory_uri().'/assets/js/lib/owlcarousel/owl.carousel.min.js', array('jquery'), '1.0', true);
-	wp_enqueue_script('moment', get_template_directory_uri().'/assets/js/lib/tempusdominus/js/moment.min.js', array('jquery'), '1.0', true);
-	wp_enqueue_script('moment-timezone', get_template_directory_uri().'/assets/js/lib/tempusdominus/js/moment-timezone.min.js', array('jquery'), '1.0', true);
-	wp_enqueue_script('tempusdominus-bootstrap-4', get_template_directory_uri().'/assets/js/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js', array('jquery'), '1.0', true);
-	wp_enqueue_script('geniuscourses-main', get_template_directory_uri().'/assets/js/main.js', array('jquery'), '1.0', true);
-
-	
-
-	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
-		wp_enqueue_script( 'comment-reply' );
-	}
- }
- add_action('wp_enqueue_scripts', 'geniuscourses_enqueue_scripts');
-
-
-function geniuscourses_ajax_example(){
-	if(!wp_verify_nonce($_REQUEST['nonce'], 'ajax-nonce')){
-		die;
-	}
-
-	if(isset($_REQUEST['string_one'])){
-		echo $_REQUEST['string_one'];
-	}
-
-	echo "<br>";
-
-	if(isset($_REQUEST['string_two'])){
-		echo $_REQUEST['string_two'];
-	}
-
-	$cars = new WP_Query(array('post-type'=>'car','posts_per_page'=>-1));
-	
-	if($cars->have_posts()) : while($cars->have_posts()) : $cars->the_post();  
-    
-	get_template_part('partials/content', 'car');
-
-    endwhile;  endif; 
-
-	wp_reset_postdata(); 
-
-	die;
-
-}
-add_action('wp_ajax_geniuscourses_ajax_example', 'geniuscourses_ajax_example');
-add_action('wp_ajax_nopriv_geniuscourses_ajax_example', 'geniuscourses_ajax_example');
-
-
-
-
-/* How HOOKS work: 
-function geniuscourses_show_meta(){
-	echo "<meta name='author' content='CRIC0VA' >";
-}
-add_action('wp_head', 'geniuscourses_show_meta');
-*/
-
-function geniuscourses_theme_init(){
-
-	register_nav_menus(array(
-		'header_nav' => 'Header Navigation',
-		'footer_nav' => 'Footer Navigation'
-	));
-
+	/*
+		* Switch default core markup for search form, comment form, and comments
+		* to output valid HTML5.
+		*/
 	add_theme_support(
 		'html5',
 		array(
@@ -218,69 +70,116 @@ function geniuscourses_theme_init(){
 		)
 	);
 
+	// Set up the WordPress core custom background feature.
+	add_theme_support(
+		'custom-background',
+		apply_filters(
+			'digital_media_garden_blog_custom_background_args',
+			array(
+				'default-color' => 'ffffff',
+				'default-image' => '',
+			)
+		)
+	);
 
-	add_theme_support( 'automatic-feed-links' );
-	add_theme_support( 'title-tag' );
+	// Add theme support for selective refresh for widgets.
+	add_theme_support( 'customize-selective-refresh-widgets' );
 
-
-	/*
-	* Enable support for Post Thumbnails on posts and pages.
-	* @link https://developer.wordpress.org/themes/functionality/featured-images-post-thumbnails/
-	*/
-		
-	add_theme_support( 'post-thumbnails' );
-	add_image_size( 'car-cover', 240, 188, true );
-	//WP reserved: thumb, thumbnail, medium, large, post-thumbnail
-
-	update_option('thumbnail_size_w', 170);
-	update_option('thumbnail_size_h', 170);
-	update_option('thumbnail_crop', 1);
-
-	set_post_thumbnail_size(170,170);
-
-
-
-	add_theme_support('post-formats',
+	/**
+	 * Add support for core custom logo.
+	 *
+	 * @link https://codex.wordpress.org/Theme_Logo
+	 */
+	add_theme_support(
+		'custom-logo',
 		array(
-			'video',
-			'quote',
-			'image',
-			'gallery'
-		));
-	
-		add_post_type_support('car','post-formats');
-
-} // END INIT FUNCTION -  function geniuscourses_theme_init
-
-add_action('after_setup_theme','geniuscourses_theme_init', 0);
-
-
-
-function geniuscourses_custom_search($form){
-	$form = "html for form";
-
-	return $form;
+			'height'      => 250,
+			'width'       => 250,
+			'flex-width'  => true,
+			'flex-height' => true,
+		)
+	);
 }
-add_filter('get_search_form','geniuscourses_custom_search');
+add_action( 'after_setup_theme', 'digital_media_garden_blog_setup' );
 
-
-//add_action( 'after_setup_theme', 'geniuscourses_setup' ); //? delete this?
-
-
-function geniuscourses_content_width() {
-	$GLOBALS['content_width'] = apply_filters( 'geniuscourses_content_width', 640 );
+/**
+ * Set the content width in pixels, based on the theme's design and stylesheet.
+ *
+ * Priority 0 to make it available to lower priority callbacks.
+ *
+ * @global int $content_width
+ */
+function digital_media_garden_blog_content_width() {
+	$GLOBALS['content_width'] = apply_filters( 'digital_media_garden_blog_content_width', 640 );
 }
-add_action( 'after_setup_theme', 'geniuscourses_content_width', 0 );
+add_action( 'after_setup_theme', 'digital_media_garden_blog_content_width', 0 );
 
+/**
+ * Register widget area.
+ *
+ * @link https://developer.wordpress.org/themes/functionality/sidebars/#registering-a-sidebar
+ */
+function digital_media_garden_blog_widgets_init() {
+	register_sidebar(
+		array(
+			'name'          => esc_html__( 'Sidebar', 'digital-media-garden-blog' ),
+			'id'            => 'sidebar-1',
+			'description'   => esc_html__( 'Add widgets here.', 'digital-media-garden-blog' ),
+			'before_widget' => '<section id="%1$s" class="widget %2$s">',
+			'after_widget'  => '</section>',
+			'before_title'  => '<h2 class="widget-title">',
+			'after_title'   => '</h2>',
+		)
+	);
+}
+add_action( 'widgets_init', 'digital_media_garden_blog_widgets_init' );
 
+/**
+ * Enqueue scripts and styles.
+ */
+function digital_media_garden_blog_scripts() {
+	wp_enqueue_style( 'digital-media-garden-blog-style', get_stylesheet_uri(), array(), _S_VERSION );
+	wp_enqueue_style( 'digital-media-garden-blog-normalize', get_template_directory_uri() . '/assets/style/normalize.css', array(), _S_VERSION );
+	wp_enqueue_style( 'digital-media-garden-blog-main', get_template_directory_uri() . '/assets/style/main.css', array(), _S_VERSION );
 
+	//wp_style_add_data( 'digital-media-garden-blog-style', 'rtl', 'replace' );
 
+	wp_enqueue_script( 'digital-media-garden-blog-navigation', get_template_directory_uri() . '/js/navigation.js', array(), _S_VERSION, true );
 
-
-function gc_add_class_on_li($classes,$item,$args){
-	if(isset($args->add_li_class)){
-		$classes[] = $args->add_li_class;
+	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
+		wp_enqueue_script( 'comment-reply' );
 	}
-	return $classes;
 }
-add_filter('nav_menu_css_class','gc_add_class_on_li',1,3);
+add_action( 'wp_enqueue_scripts', 'digital_media_garden_blog_scripts' );
+
+/**
+ * Implement the Custom Header feature.
+ */
+require get_template_directory() . '/inc/custom-header.php';
+
+/**
+ * Custom template tags for this theme.
+ */
+require get_template_directory() . '/inc/template-tags.php';
+
+/**
+ * Functions which enhance the theme by hooking into WordPress.
+ */
+require get_template_directory() . '/inc/template-functions.php';
+
+/**
+ * Customizer additions.
+ */
+require get_template_directory() . '/inc/customizer.php';
+
+/**
+ * Load Jetpack compatibility file.
+ */
+if ( defined( 'JETPACK__VERSION' ) ) {
+	require get_template_directory() . '/inc/jetpack.php';
+}
+
+
+
+
+

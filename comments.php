@@ -7,7 +7,7 @@
  *
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
  *
- * @package Geniuscourses
+ * @package digital-media-garden-blog
  */
 
 /*
@@ -28,18 +28,18 @@ if ( post_password_required() ) {
 		?>
 		<h2 class="comments-title">
 			<?php
-			$geniuscourses_comment_count = get_comments_number();
-			if ( '1' === $geniuscourses_comment_count ) {
+			$digital_media_garden_blog_comment_count = get_comments_number();
+			if ( '1' === $digital_media_garden_blog_comment_count ) {
 				printf(
 					/* translators: 1: title. */
-					esc_html__( 'One thought on &ldquo;%1$s&rdquo;', 'geniuscourses' ),
+					esc_html__( 'One thought on &ldquo;%1$s&rdquo;', 'digital-media-garden-blog' ),
 					'<span>' . wp_kses_post( get_the_title() ) . '</span>'
 				);
 			} else {
 				printf( 
 					/* translators: 1: comment count number, 2: title. */
-					esc_html( _nx( '%1$s thought on &ldquo;%2$s&rdquo;', '%1$s thoughts on &ldquo;%2$s&rdquo;', $geniuscourses_comment_count, 'comments title', 'geniuscourses' ) ),
-					number_format_i18n( $geniuscourses_comment_count ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					esc_html( _nx( '%1$s thought on &ldquo;%2$s&rdquo;', '%1$s thoughts on &ldquo;%2$s&rdquo;', $digital_media_garden_blog_comment_count, 'comments title', 'digital-media-garden-blog' ) ),
+					number_format_i18n( $digital_media_garden_blog_comment_count ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					'<span>' . wp_kses_post( get_the_title() ) . '</span>'
 				);
 			}
@@ -65,7 +65,7 @@ if ( post_password_required() ) {
 		// If comments are closed and there are comments, let's leave a little note, shall we?
 		if ( ! comments_open() ) :
 			?>
-			<p class="no-comments"><?php esc_html_e( 'Comments are closed.', 'geniuscourses' ); ?></p>
+			<p class="no-comments"><?php esc_html_e( 'Comments are closed.', 'digital-media-garden-blog' ); ?></p>
 			<?php
 		endif;
 
